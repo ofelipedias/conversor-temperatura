@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conversor-temperatura-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: conversor-temperatura
+  template:
+    metadata:
+      labels:
+        app: conversor-temperatura
+    spec:
+      containers:
+      - name: conversor-temperatura
+        image: felipedias/conversor-temperatura:0.1
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: conversor-temperatura-service
+spec:
+  selector:
+    app: conversor-temperatura
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+    nodePort: 30000
+  type: LoadBalancer
